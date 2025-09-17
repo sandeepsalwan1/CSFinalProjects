@@ -1,7 +1,5 @@
 package uk.ac.nulondon;
 
-import java.util.function.Predicate;
-
 public final class App {
     private App() {
 

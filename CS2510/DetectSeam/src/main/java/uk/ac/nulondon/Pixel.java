@@ -1,6 +1,6 @@
 package uk.ac.nulondon;
 
-import java.awt.*;
+import java.awt.Color;
 
 /**
  * represents a Pixel similar to a linkedlist. Has a color, and energy (data) and the left and right neigbhors.
@@ -34,11 +34,11 @@ public class Pixel {
      * helper constructor
      * @param RGB
      */
-    public Pixel(int RGB) {
+    public Pixel(int rgb) {
         this.energy = -1;
         this.left = null;
         this.right = null;
-        this.color = new Color(RGB);
+        this.color = new Color(rgb);
     }
 
     /**
@@ -94,12 +94,12 @@ public class Pixel {
         double botRight = below != null && below.right != null ? below.right.getBrightness() : defaultBright;
 
         // now putting it altogether
-        double leftHorizontal = topLeft + 2*midLeft + botLeft;
-        double rightHorizontal = topRight + 2*midRight + botRight;
+        double leftHorizontal = topLeft + 2 * midLeft + botLeft;
+        double rightHorizontal = topRight + 2 * midRight + botRight;
         double horizontalEnergy = leftHorizontal - rightHorizontal;
 
-        double topVertical = topLeft + 2*topMid + topRight;
-        double botVertical = botRight + 2*botMid + botLeft;
+        double topVertical = topLeft + 2 * topMid + topRight;
+        double botVertical = botRight + 2 * botMid + botLeft;
         double verticalEnergy = topVertical - botVertical;
 
         this.energy = Math.sqrt((horizontalEnergy * horizontalEnergy) + (verticalEnergy * verticalEnergy));

@@ -13,17 +13,17 @@ import java.util.Stack;
  * */
 
 // main method
-public class Operation {
+public final class Operation {
     //initializing variables and data
     private final Image image;
-    private final Stack < Modification > alterations;
+    private final Stack<Modification> alterations;
     private int tempImgIndex;
     private final Scanner scanner;
 
     // class for performing operations
     public Operation(Image image) {
         this.image = image;
-        this.alterations = new Stack < > (); // initialize alterations stack
+        this.alterations = new Stack<>(); // initialize alterations stack
         this.tempImgIndex = 0;
         scanner = new Scanner(System.in);
     }
@@ -34,7 +34,7 @@ public class Operation {
         createTempImage(editedImage);
         System.out.println("Do you want to continue(y/n)?");
         String choice = scanner.next();
-        if (choice.equals("y")) {
+        if ("y".equals(choice)) {
             Color[] removedColumn = image.deleteColumn(randomColumnIndex);
             createTempImage(image.getPixels()); // create temporary image
             String changeType = "RANDOM_HIGHLIGHT";
@@ -69,7 +69,7 @@ public class Operation {
         createTempImage(editedImage);
         System.out.println("Do you want to continue(y/n)?");
         String choice = scanner.next(); // get user choice
-        if (choice.equals("y")) {
+        if ("y".equals(choice)) {
             Color[] removedColumn = image.deleteColumn(bluestColumnIndex);
             createTempImage(image.getPixels());
             String changeType = "BLUEST_HIGHLIGHT";
@@ -103,7 +103,7 @@ public class Operation {
         }
         System.out.println("Do you want to undo the previous edit(y/n)?");
         String choice = scanner.next();
-        if (!choice.equals("y")) {
+        if (!"y".equals(choice)) {
             return;
         }
         Modification previousEdit = alterations.pop();
@@ -121,7 +121,7 @@ public class Operation {
         Image image = ImageHandler.loadImage(imagePath); // load image
         Operation operation = new Operation(image);
         String userChoice = String.valueOf(ImageUI.promptUserChoice());
-        while (!userChoice.equals("q")) {
+        while (!"q".equals(userChoice)) {
             switch (userChoice) {
                 case "b":
                 case "B":
@@ -148,7 +148,7 @@ public class Operation {
         private final Color[] data;
         private final String changeType;
 
-        public Modification(int index, Color[] data, String changeType) {
+        Modification(int index, Color[] data, String changeType) {
             this.index = index;
             this.data = data;
             this.changeType = changeType;

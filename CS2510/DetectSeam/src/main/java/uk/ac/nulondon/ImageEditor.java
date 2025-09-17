@@ -1,16 +1,15 @@
 package uk.ac.nulondon;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 import java.util.function.Function;
-import java.util.function.Supplier;
+// import java.util.function.Supplier;
 
 /**
  * Uses operations from the Image class to store edithistory, and to perform more complex operations
@@ -18,15 +17,15 @@ import java.util.function.Supplier;
  * images and pushing/popping to/from editHistory
  * also has the number of versions
  */
-public class ImageEditor {
+public final class ImageEditor {
 
     Image image;
 
-    public Stack < List < Pixel >> editHistory;
-    private static int NUM_OF_VERSIONS = 0;
+    public Stack<List<Pixel>> editHistory;
+    private static int numOfVersions = 0;
 
     public ImageEditor() {
-        editHistory = new Stack < > ();
+        editHistory = new Stack<>();
     }
 
     /**
@@ -61,9 +60,8 @@ public class ImageEditor {
      * @return file name for temp file
      */
     public static String fileName() {
-        // first temp is "00"
-        String name = "tempIMG_0" + (NUM_OF_VERSIONS) + ".png";
-        NUM_OF_VERSIONS++;
+        String name = "tempIMG_0" + numOfVersions + ".png";
+        numOfVersions++;
         return name;
     }
 
@@ -92,7 +90,7 @@ public class ImageEditor {
      * @param criteria
      * @return
      */
-    public List < Pixel > findSeam(Function < Pixel, Double > criteria) {
+    public List<Pixel> findSeam(Function<Pixel, Double> criteria) {
 
         int width = image.getWidth();
         int height = image.getHeight();
@@ -101,17 +99,17 @@ public class ImageEditor {
         double[] currentSum = new double[width];
 
         // stores potential seams for each column
-        List < List < Pixel >> prevSeams = new ArrayList < > (width);
-        List < List < Pixel >> currentSeams = new ArrayList < > (width);
+        List<List<Pixel>> prevSeams = new ArrayList<>(width);
+        List<List<Pixel>> currentSeams = new ArrayList<>(width);
 
         // first row of seams/sums initialized
         Pixel currentPixel = image.pixels.getFirst();
         for (int x = 0; x < image.getWidth(); x++) {
             // adding values
             prevSum[x] = criteria.apply(currentPixel);
-            prevSeams.add(new ArrayList < > (List.of(currentPixel)));
+            prevSeams.add(new ArrayList<>(List.of(currentPixel)));
             // don't add anything to current seams b/c will fill later
-            currentSeams.add(new ArrayList < > ());
+            currentSeams.add(new ArrayList<>());
             // iterate right
             currentPixel = currentPixel.right;
         }
@@ -144,13 +142,13 @@ public class ImageEditor {
 
             // update prev sums
             prevSum = currentSum;
-            prevSeams = new ArrayList < > (currentSeams);
+            prevSeams = new ArrayList<>(currentSeams);
             // reset sums for next iteration
             currentSum = new double[width];
             currentSeams.clear();
             // but also have to fill up inner oarts
             for (int i = 0; i < width; i++) {
-                currentSeams.add(new ArrayList < > ());
+                currentSeams.add(new ArrayList<>());
             }
         }
 
@@ -169,11 +167,11 @@ public class ImageEditor {
      * Highlights Seam
      * also pushes to edit history
      */
-    public void highlightSeam(Function < Pixel, Double > seamCriteria, Color color) {
+    public void highlightSeam(Function<Pixel, Double> seamCriteria, Color color) {
         // gets the actual pixels before the highlight
-        List < Pixel > seamToSave = findSeam(seamCriteria);
+        List<Pixel> seamToSave = findSeam(seamCriteria);
         // will store the highlighted pixels
-        List < Pixel > highlightedPixels = new ArrayList < > ();
+        List<Pixel> highlightedPixels = new ArrayList<>();
         for (int i = 0; i < seamToSave.size(); i++) {
             Pixel highlightedPixel = new Pixel(color, seamToSave.get(i).left, seamToSave.get(i).right);
             highlightedPixels.add(highlightedPixel);
@@ -192,7 +190,7 @@ public class ImageEditor {
      * does not
      * @param toBeDeleted
      */
-    public void deleteSeam(List < Pixel > toBeDeleted) {
+    public void deleteSeam(List<Pixel> toBeDeleted) {
         editHistory.push(toBeDeleted);
         image.removeSeam(toBeDeleted);
     }
@@ -231,7 +229,7 @@ public class ImageEditor {
      */
     public void undo(Operation op) throws IOException {
         if (!editHistory.isEmpty()) {
-            List < Pixel > lastEdit = null;
+            List<Pixel> lastEdit = null;
             if (op == Operation.UNDO_DELETION) {
                 editHistory.pop();
                 lastEdit = editHistory.pop();
@@ -254,11 +252,11 @@ public class ImageEditor {
      */
     public void highlight(Operation op) throws IOException {
         if (op == Operation.BLUE_HIGHLIGHT) {
-            highlightSeam(ImageEditor::getBlue, new Color(0, 0, 255));
+            highlightSeam(ImageEditor::getBlue, Color.BLUE);
         } else if (op == Operation.ENERGY_HIGHLIGHT) {
             // update energy b/c need to check
             updateImageEnergy();
-            highlightSeam(ImageEditor::getNegativeEnergy, new Color(255, 0, 0));
+            highlightSeam(ImageEditor::getNegativeEnergy, Color.RED);
         }
         exportImage(fileName());
     }
@@ -294,5 +292,13 @@ public class ImageEditor {
         ie.delete(Operation.DELETION);
         ie.highlight(Operation.BLUE_HIGHLIGHT);
         ie.delete(Operation.DELETION);
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public Stack<List<Pixel>> getEditHistory() {
+        return editHistory;
     }
 }

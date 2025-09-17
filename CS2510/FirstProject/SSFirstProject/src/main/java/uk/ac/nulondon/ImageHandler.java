@@ -7,7 +7,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 // class for handling image loading and operations
-public class ImageHandler {
+public final class ImageHandler {
+    private ImageHandler() { }
     // loads image from specfic file path
     public static Image loadImage(String imagePath) {
         try {

@@ -1,7 +1,7 @@
 package uk.ac.nulondon;
 import java.awt.Color;
 // class representing an image with pixel data
-public class Image {
+public final class Image {
     // 2D array storing colors
     private Color[][] pixels;
 
@@ -48,5 +48,4 @@ public class Image {
         temp[columnIndex] = column;
         pixels = temp;
     }
-}
 }

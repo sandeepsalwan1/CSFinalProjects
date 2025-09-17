@@ -59,15 +59,7 @@
         <artifactId>export-maven-plugin</artifactId>
         <version>1.0</version>
         <configuration>
-          <zipFileName>Name_Surname.zip</zipFileName>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.atp-fivt</groupId>
-        <artifactId>export-maven-plugin</artifactId>
-        <version>1.0</version>
-        <configuration>
-          <zipFileName>SandeepSalwan.zip</zipFileName>
+          <zipFileName>DetectSeam.zip</zipFileName>
         </configuration>
       </plugin>
       <plugin>
