@@ -1,8 +1,7 @@
 package uk.ac.nulondon;
 
-import java.awt.*;
+import java.awt.Color;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.awt.image.BufferedImage;
 
@@ -18,7 +17,7 @@ public class Image {
     // Each linked list represents a row in the image
     // pixels is the list of rows, which make an image
 
-    List < Pixel > pixels;
+    List<Pixel> pixels;
 
     /**
      * constructor converts BufferedImage to type of pixels
@@ -27,7 +26,7 @@ public class Image {
      */
     public Image(BufferedImage bi) {
         // instantiate the list
-        this.pixels = new ArrayList < > ();
+        this.pixels = new ArrayList<>();
         // now loop through the buffered image, left to right, top to bottom
         // looping through the bi, left to right, top to bottom, row by row
 
@@ -86,8 +85,9 @@ public class Image {
      */
     Pixel getPixel(int x, int y) {
         Pixel pixel = pixels.get(y);
-        for (int i = 0; i < x; i++)
+        for (int i = 0; i < x; i++) {
             pixel = pixel.right;
+        }
         return pixel;
     }
     /**
@@ -112,8 +112,9 @@ public class Image {
      * @return
      */
     private int getWidth(Pixel pixel) {
-        if (pixel.right == null)
+        if (pixel.right == null) {
             return 1;
+        }
         return 1 + getWidth(pixel.right);
     }
 
@@ -129,8 +130,9 @@ public class Image {
             for (int x = 0; x < getWidth(); x++) {
                 rv.append(getPixel(x, y).energy);
                 // if it is the last pixel in the row, no space
-                if (x + 1 != getWidth())
+                if (x + 1 != getWidth()) {
                     rv.append(" ");
+                }
             }
             rv.append(System.lineSeparator());
         }
@@ -144,7 +146,7 @@ public class Image {
      * removes a seam
      * @param removed has the data on what to remove
      */
-    public void removeSeam(List < Pixel > removed) {
+    public void removeSeam(List<Pixel> removed) {
         for (int i = 0; i < removed.size(); i++) {
             // if not on left edge
             if (removed.get(i).left != null) {
@@ -154,15 +156,16 @@ public class Image {
                 // update the list element
                 pixels.set(i, removed.get(i).right);
             }
-            if (removed.get(i).right != null)
+            if (removed.get(i).right != null) {
                 removed.get(i).right.left = removed.get(i).left;
+            }
         }
     }
     /**
      * adds seam
      /* @param List<Pixel> data
      */
-    public void addSeam(List < Pixel > data) {
+    public void addSeam(List<Pixel> data) {
         for (int i = 0; i < data.size(); i++) {
             // if the pixel we are inserting is not on left edge
             if (data.get(i).left != null) {

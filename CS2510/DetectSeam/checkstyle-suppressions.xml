@@ -5,4 +5,8 @@
   
 <suppressions>
     <suppress files="[/\\]target[/\\]" checks=".*" />
+    <!-- Allow package-private fields in domain model to keep tests simple -->
+    <suppress files="[/\\]src[/\\]main[/\\]java[/\\]uk[/\\]ac[/\\]nulondon[/\\]Pixel.java" checks="VisibilityModifier"/>
+    <suppress files="[/\\]src[/\\]main[/\\]java[/\\]uk[/\\]ac[/\\]nulondon[/\\]Image.java" checks="VisibilityModifier"/>
+    <suppress files="[/\\]src[/\\]main[/\\]java[/\\]uk[/\\]ac[/\\]nulondon[/\\]ImageEditor.java" checks="VisibilityModifier"/>
 </suppressions>

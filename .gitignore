@@ -1,0 +1,15 @@
+# Java/Maven
+**/target/
+*.class
+*.log
+
+# Kotlin scripts
+**/.idea/
+**/.gradle/
+
+# OS
+.DS_Store
+
+# Temp images
+CS2510/DetectSeam/tempIMG_*.png
+

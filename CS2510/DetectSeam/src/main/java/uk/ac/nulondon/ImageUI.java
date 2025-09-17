@@ -1,5 +1,4 @@
 package uk.ac.nulondon;
-import java.awt.*;
 import java.util.Scanner;
 import java.io.File;
 import java.io.IOException;
@@ -8,7 +7,7 @@ import java.io.IOException;
  * UI class
  */
 public class ImageUI {
-    private static final Scanner scanner = new Scanner(System.in);
+    private static final Scanner SCANNER = new Scanner(System.in);
     private ImageEditor imageEditor; // A reference to the image editor for operations
 
     /**
@@ -27,7 +26,7 @@ public class ImageUI {
         while (!exit) {
             switch (promptUserChoice()) {
                 case 'b':
-                    if(imageEditor.image.getWidth() >= 2) {
+                    if (imageEditor.getImage().getWidth() >= 2) {
                         imageEditor.highlight(Operation.BLUE_HIGHLIGHT);
                         confirmAndDeleteSeam();
                     } else {
@@ -35,7 +34,7 @@ public class ImageUI {
                     }
                     break;
                 case 'e':
-                    if(imageEditor.image.getWidth() >= 2) {
+                    if (imageEditor.getImage().getWidth() >= 2) {
                         imageEditor.highlight(Operation.ENERGY_HIGHLIGHT);
                         confirmAndDeleteSeam();
                     } else {
@@ -43,9 +42,9 @@ public class ImageUI {
                     }
                     break;
                 case 'd':
-                    if(imageEditor.image.getWidth() < 2 ) {
+                    if (imageEditor.getImage().getWidth() < 2) {
                         System.out.println("Cannot delete any more seams!");
-                    } else if(imageEditor.editHistory.isEmpty() || imageEditor.editHistory.size() % 2 != 0) {
+                    } else if (imageEditor.getEditHistory().isEmpty() || imageEditor.getEditHistory().size() % 2 != 0) {
                         System.out.println("Need to highlight a column first!");
                     } else {
                         confirmAndDeleteSeam();
@@ -55,10 +54,11 @@ public class ImageUI {
                     // if edit history length is even, that means that a highlight has happened
                     // and a removal has happened
                     // which means we can undo a deletion
-                    if(imageEditor.editHistory.isEmpty())
+                    if (imageEditor.getEditHistory().isEmpty()) {
                         System.out.println("Cannot undo, no edit history!");
-                    else
+                    } else {
                         undoLastAction(Operation.UNDO_DELETION);
+                    }
                     break;
                 case 'q':
                     imageEditor.exportImage("newImg.png");
@@ -77,8 +77,9 @@ public class ImageUI {
      * @throws IOException
      */
     private void confirmAndDeleteSeam() throws IOException {
-        System.out.println("Do you want to delete the highlighted seam? Press d to continue, press any other key to cancel");
-        char response = scanner.next().charAt(0);
+        System.out.println("Do you want to delete the highlighted seam?");
+        System.out.println("Press d to continue, any other key to cancel");
+        char response = SCANNER.next().charAt(0);
         if (response == 'd' || response == 'D') {
             imageEditor.delete(Operation.DELETION);
         } else {
@@ -90,10 +91,10 @@ public class ImageUI {
      * undos user input
      */
     private void undoLastAction(Operation op) throws IOException {
-        if(op == Operation.UNDO_DELETION) {
+        if (op == Operation.UNDO_DELETION) {
             imageEditor.undo(Operation.UNDO_DELETION);
             System.out.println("Undo successful.");
-        } else if(op == Operation.UNDO_HIGHLIGHT) {
+        } else if (op == Operation.UNDO_HIGHLIGHT) {
             imageEditor.undo(Operation.UNDO_HIGHLIGHT);
             System.out.println("Deletion canceled.");
         }
@@ -106,7 +107,7 @@ public class ImageUI {
     public static String promptImagePath() {
         while (true) {
             System.out.println("Enter the file path of the image (ex: beach.png):");
-            String imagePath = scanner.nextLine();
+            String imagePath = SCANNER.nextLine();
             if (new File("src/main/resources/" + imagePath).exists()) {
                 return imagePath;
             } else {
@@ -125,7 +126,7 @@ public class ImageUI {
         System.out.println("d - Remove the highlighted seam");
         System.out.println("u - Undo previous edit");
         System.out.println("q - Quit");
-        return scanner.next().charAt(0);
+        return SCANNER.next().charAt(0);
     }
 
     /**
